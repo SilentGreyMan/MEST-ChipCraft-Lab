@@ -1,0 +1,66 @@
+\m5_TLV_version 1d: tl-x.org
+\m5
+   
+   // =================================================
+   // Welcome!  New to Makerchip? Try the "Learn" menu.
+   // =================================================
+   
+   //use(m5-1.0)   /// uncomment to use M5 macro library.
+\SV
+   // Macro providing required top-level module definition, random
+   // stimulus support, and Verilator config.
+   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
+\TLV
+   $reset = *reset;
+   // MEST ChipCraft Lab 4.3
+   //Egg Sortter Clasifer in Makerchip
+   //Build the Basic Circuit (Medium and Large):
+   //Set up a TL-Verilog circuit that takes an 8-bit binary input for weight (randomly generated).
+   //Create an output size that assigns:
+   //		1 if the egg is medium (weight < 56g).
+   //		2 if the egg is large (weight ≥ 56g).
+   //
+   // 256 	128 64 32 16 	8 4 2 1
+   // 8'd56 = 8b'0011 1000 = 8'h38
+   //Therefore large egg is bits 7 or 6 high or if bits 3,4, & 5 are high for case equal to 56g
+    
+   $weight[7:0] = $input[7:0];
+   $large = $weight[7] | $weight[6] | ($weight[5] && $weight[4] && $weight[3]);
+      
+   //alternate solution for detecting large egg
+   $alt_large = $weight[7:0] >= 8'd56;
+   
+   //codes for medium and large eggs
+   $md[1:0] = 2'd1;
+   $lg[1:0] = 2'd2;
+   
+   //solution to sort for medium or large size
+   $md_lg_size[1:0] = $large ? $lg : $md;
+   
+   //Extend to Three Categories:
+   //Modify the circuit to include an extra-large category, assigning:
+   //		3 if the egg weight is extra-large (weight ≥ 64g).
+   //Use cascading ternary operators to assign the correct size value for each condition.
+   
+   //8d'64 = 8'b1000 0000, therefore if bit 7 or 6 high then extra large
+   $extraLarge = $weight[7] || $weight[6];
+   
+   //alternate solution for detecting extra large egg
+   $alt_exLarge = $weight[7:0] >= 8'd64;
+   
+   //code for extra large egg
+   $xl[1:0] = 2'd3;
+   
+   //solution to sort for medium or large size   
+   $size[1:0] = $extraLarge ? $xl : $large ? $lg : $md;
+
+   //Test cases
+   //change to values 55, 56, 63, 64, 66
+   //$input[7:0] = 8'd64; 
+   //...
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+\SV
+   endmodule

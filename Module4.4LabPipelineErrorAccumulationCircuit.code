@@ -1,9 +1,15 @@
-\TLV_version 1d: tl-x.org
-\source top.tlv 8
+\m5_TLV_version 1d: tl-x.org
+\m5
+   
+   // =================================================
+   // Welcome!  New to Makerchip? Try the "Learn" menu.
+   // =================================================
+   
+   //use(m5-1.0)   /// uncomment to use M5 macro library.
 \SV
    // Macro providing required top-level module definition, random
    // stimulus support, and Verilator config.
-   module top(input wire clk, input wire reset, input wire [31:0] cyc_cnt, output wire passed, output wire failed);    /* verilator lint_save */ /* verilator lint_off UNOPTFLAT */  bit [256:0] RW_rand_raw; bit [256+63:0] RW_rand_vect; pseudo_rand #(.WIDTH(257)) pseudo_rand (clk, reset, RW_rand_raw[256:0]); assign RW_rand_vect[256+63:0] = {RW_rand_raw[62:0], RW_rand_raw};  /* verilator lint_restore */  /* verilator lint_off WIDTH */ /* verilator lint_off UNOPTFLAT */   // (Expanded in Nav-TLV pane.)
+   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
 \TLV
    $reset = *reset;
    //2.	Define Pipeline Stages and Error Conditions:
@@ -12,7 +18,7 @@
    //	Stage 1: bad_input and illegal_op. Combine these using an OR operation to create error1.
    //	Stage 3: Add an overflow condition. Combine it with error1 to create error2.
    //	Stage 6: Add a divide_by_zero condition. Combine this with error2 to create a final error3.
-
+   
    |comp
       @1
          $error1 = $bad_input || $illegal_op;
@@ -21,7 +27,7 @@
       @6
          $error3 = $divide_by_zero || $error2;
    //...
-
+   
    // Assert these to end simulation (before Makerchip cycle limit).
    *passed = *cyc_cnt > 40;
    *failed = 1'b0;

@@ -1,0 +1,1 @@
+Benefits of TL-Verilog’s timing abstraction in managing pipeline stages is being able to move the piplelines around without introducing fat finger errors in renaming internal signals. TL-Verilog allows you to simply move the @number around and the pipeline is thus moved. You can also add pipelines just as easly.

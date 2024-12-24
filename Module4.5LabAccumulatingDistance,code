@@ -1,0 +1,45 @@
+\m5_TLV_version 1d: tl-x.org
+\m5
+   
+   // =================================================
+   // Welcome!  New to Makerchip? Try the "Learn" menu.
+   // =================================================
+   
+   //use(m5-1.0)   /// uncomment to use M5 macro library.
+\SV
+   // Macro providing required top-level module definition, random
+   // stimulus support, and Verilator config.
+
+   //The key to preventing an error in this lab was adding the following include statement
+   `include "sqrt32.v";
+   m5_makerchip_module   // (Expanded in Nav-TLV pane.)
+\TLV
+   $reset = *reset;
+   //2.	Define Pipeline Stages:
+   //	o	Define a three-stage pipeline that calculates distances using Pythagoras' theorem. Compute the distance C as sqrt(A^2 + B^2) in the first three stages.
+   //3.	Add State for Accumulated Distance:
+   //	o	In the fourth pipeline stage, define a total_distance variable.
+   //	o	Add a reset condition to initialize total_distance to zero on reset.
+   //4.	Implement Distance Accumulation:
+   //	o	If valid is asserted, add the newly computed distance C to total_distance.
+   //	o	If valid is not asserted, retain the previous value of total_distance.
+   |calc
+      @1
+         //m bits * n bits <= m+n bits, for this lab though going to just use 32bit number throughout
+         $A_sq[31:0] = $A[3:0] * $A[3:0];
+         $B_sq[31:0] = $B[3:0] * $B[3:0];
+      @2
+         $C_sq[31:0] = $A_sq + $B_sq;
+      @3
+         $C[31:0] = sqrt($C_sq);
+         //when A is 2 and B is 1, A_sq is 4, B_sq is 1, C_sq is 5, C is 2
+         //C_sq is delayed 1 cycle from A & B, C is delayed 1 cycle from C
+      @4
+         $total_distance[31:0] = *reset ? 32'd0 : $valid ? $C[31:0] + >>1$total_distance[31:0] : >>1$total_distance[31:0];
+   //...
+   
+   // Assert these to end simulation (before Makerchip cycle limit).
+   *passed = *cyc_cnt > 40;
+   *failed = 1'b0;
+\SV
+   endmodule

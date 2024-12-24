@@ -1,0 +1,2 @@
+Found out through debugging that needed to have the `include "sqrt32.v";  in the SV section near the top of the file to prevent an error not recognizing sqrt().
+Reflection for this lab is the use of the >>1 meaning ahead by one in the pipeline resonated with me more than just stating it is the previous value. Using it for pipelined accumulation was straightforward.

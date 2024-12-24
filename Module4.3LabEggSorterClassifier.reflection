@@ -1,0 +1,4 @@
+I had no challenges using conditional logic and ternary operators because I had completed the module 3 training which used them. 
+I did implement the comparison with OR and AND gates initially instead of using the >= operators which resulted in debugging the code to fix a misnumbered bit. 
+I also added a commentable line to test specific values of input instead of searching the waveform for random inputs that hit the corner cases.
+I am not sure about the desired format or method for submitting the project to GitHUB task since have not used GitHUB before this case. So come up with this, a .code filename and .reflection file name with the reflection.
